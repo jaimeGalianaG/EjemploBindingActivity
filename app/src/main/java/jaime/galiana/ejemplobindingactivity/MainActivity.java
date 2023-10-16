@@ -11,9 +11,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.text.Layout;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -57,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
                             if (result.getData() != null && result.getData().getExtras() != null){
                                 Alumno alumno = (Alumno) result.getData().getExtras().getSerializable("ALUMNO");
                                 listaAlumnos.add(alumno);
+                                mostrarAlumnos();
                             }else{
                                 Toast.makeText(MainActivity.this, "No llegaron los datos", Toast.LENGTH_SHORT).show();
                             }
@@ -66,6 +72,27 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    private void mostrarAlumnos() {
+        //eliminar lo que haya en el linear layout
+        binding.contentMain.contenedorMain.removeAllViews();
+
+        for (Alumno al: listaAlumnos) {
+            LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
+            View alumnoView = layoutInflater.inflate(R.layout.alumno_fila_view, null);
+            TextView txtNombre = alumnoView.findViewById(R.id.lbNombreAlumnoView);
+            TextView txtApellidos = alumnoView.findViewById(R.id.lbApellidosAlumnoView);
+            TextView txtCiclo = alumnoView.findViewById(R.id.lbCicloAlumnoView);
+            TextView txtGrupo = alumnoView.findViewById(R.id.lbGrupoAlumnoView);
+
+            txtNombre.setText(al.getNombre());
+            txtApellidos.setText(al.getApellidos());
+            txtCiclo.setText(al.getCiclo());
+            txtGrupo.setText(String.valueOf(al.getGrupo()));
+
+            binding.contentMain.contenedorMain.addView(alumnoView);
+        }
     }
     /*
     *
